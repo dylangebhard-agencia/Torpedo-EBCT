@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Torpedo EBCT · Estadística · Startup Ciencia</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FFFFFF;--sf:#F7F8FB;--sf2:#EEF0F6;--bd:#DDE1EA;--tx:#1A1F36;--dim:#6B7394;--bl:#2563EB;--gn:#059669;--rd:#DC2626;--or:#D97706;--pp:#7C3AED;--bgl:#EFF6FF;--bgg:#ECFDF5;--bgr:#FEF2F2;--bgo:#FFFBEB;--bgp:#F5F3FF}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);-webkit-font-smoothing:antialiased}
+
+/* Header */
+.hdr{background:#fff;border-bottom:2px solid var(--bd);padding:14px 28px 0;position:sticky;top:0;z-index:100}
+.hdr-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.logo{font-size:10px;font-weight:700;letter-spacing:3px;color:var(--bl);text-transform:uppercase}
+.htitle{font-size:18px;font-weight:700}
+.hsub{font-size:11px;color:var(--dim);margin-top:1px}
+
+/* Nav */
+.nav{display:flex;gap:0;border-bottom:none}
+.pillar{padding:10px 22px;font-size:12px;font-weight:600;cursor:pointer;color:var(--dim);border-bottom:3px solid transparent;transition:all .15s;white-space:nowrap}
+.pillar:hover{color:var(--tx)}
+.pillar.active{color:var(--bl);border-bottom-color:var(--bl)}
+.pillar[data-p="stats"].active{color:var(--or);border-bottom-color:var(--or)}
+.pillar[data-p="suc"].active{color:var(--gn);border-bottom-color:var(--gn)}
+
+/* Sub-tabs row */
+.subtabs{display:flex;gap:6px;padding:8px 28px;background:var(--sf);border-bottom:1px solid var(--bd)}
+.stab{padding:6px 16px;font-size:11px;font-weight:500;border-radius:6px;cursor:pointer;color:var(--dim);transition:all .15s}
+.stab:hover{color:var(--tx);background:var(--sf2)}
+.stab.active{color:var(--bl);background:var(--bgl);font-weight:600}
+
+/* Search */
+.si{width:170px;padding:7px 12px 7px 30px;background:var(--sf);border:1.5px solid var(--bd);border-radius:8px;color:var(--tx);font-family:'DM Sans',sans-serif;font-size:11px;outline:none}
+.si:focus{border-color:var(--bl);box-shadow:0 0 0 3px rgba(37,99,235,.08)}
+.sw{position:relative}.sw .ic2{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--dim);font-size:12px}
+
+/* Content */
+.content{padding:24px 28px 60px;max-width:1100px;margin:0 auto}
+.section{display:none}.section.active{display:block}
+
+/* Context paragraph */
+.ctx{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:14px 18px;margin-bottom:24px;font-size:12px;color:#4B5563;line-height:1.65}
+.ctx strong{color:var(--tx)}
+
+/* Section headers */
+.sh{font-size:16px;font-weight:700;margin:32px 0 14px;padding-bottom:8px;border-bottom:2px solid var(--sf2);display:flex;align-items:center;gap:8px}
+.sh:first-child{margin-top:0}
+
+/* KPI */
+.kg{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:22px}
+.kpi{background:var(--sf);border:1px solid var(--bd);border-radius:10px;padding:14px 16px;overflow:hidden;position:relative}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:10px 10px 0 0}
+.kpi.b::before{background:var(--bl)}.kpi.g::before{background:var(--gn)}.kpi.r::before{background:var(--rd)}.kpi.o::before{background:var(--or)}.kpi.p::before{background:var(--pp)}
+.kv{font-family:'JetBrains Mono',monospace;font-size:26px;font-weight:700;line-height:1.1;margin-bottom:3px}
+.kpi.b .kv{color:var(--bl)}.kpi.g .kv{color:var(--gn)}.kpi.r .kv{color:var(--rd)}.kpi.o .kv{color:var(--or)}.kpi.p .kv{color:var(--pp)}
+.kl{font-size:10px;color:var(--dim);font-weight:500;line-height:1.35}
+
+/* Tables */
+.tw{background:var(--bg);border:1.5px solid var(--bd);border-radius:10px;overflow:hidden;margin-bottom:18px}
+.tt{padding:10px 16px;font-size:12px;font-weight:700;border-bottom:1.5px solid var(--bd);background:var(--sf)}
+table{width:100%;border-collapse:collapse;font-size:11.5px}
+th{text-align:left;padding:9px 14px;font-weight:600;color:var(--dim);font-size:9.5px;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid var(--bd);background:var(--sf)}
+td{padding:9px 14px;border-bottom:1px solid var(--sf2)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(37,99,235,.02)}
+.m{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:500}
+.vg{color:var(--gn)}.vr{color:var(--rd)}.vb{color:var(--bl)}.vo{color:var(--or)}.vp{color:var(--pp)}
+
+/* Insight cards */
+.ig{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px;margin-bottom:22px}
+.ins{background:var(--bg);border:1.5px solid var(--bd);border-radius:10px;padding:14px 16px;border-left:4px solid}
+.ins.a{border-left-color:var(--gn);background:var(--bgg)}.ins.d{border-left-color:var(--rd);background:var(--bgr)}
+.ins.n{border-left-color:var(--bl);background:var(--bgl)}.ins.w{border-left-color:var(--or);background:var(--bgo)}
+.ins-t{font-size:12px;font-weight:700;margin-bottom:5px}.ins-b{font-size:11px;color:#4B5563;line-height:1.6}
+.is{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:12px}
+
+/* Bars */
+.bars{margin-bottom:22px}
+.br{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.bl-l{font-size:11px;width:140px;text-align:right;color:var(--dim);flex-shrink:0;font-weight:500}
+.bl-t{flex:1;height:26px;background:var(--sf2);border-radius:6px;overflow:hidden}
+.bl-f{height:100%;border-radius:6px;display:flex;align-items:center;padding-left:10px;font-size:10px;font-weight:700;font-family:'JetBrains Mono',monospace;color:white}
+.bl-f.fb{background:var(--bl)}.bl-f.fg{background:var(--gn)}.bl-f.fo{background:var(--or)}.bl-f.fp{background:var(--pp)}.bl-f.fr{background:var(--rd)}
+.bl-pct{font-size:10px;color:var(--dim);width:50px;font-family:'JetBrains Mono',monospace;font-weight:500}
+
+/* Two columns */
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:22px}
+
+/* Badges */
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:9px;font-weight:700}
+.badge-g{background:var(--bgg);color:var(--gn)}.badge-r{background:var(--bgr);color:var(--rd)}.badge-o{background:var(--bgo);color:var(--or)}
+
+.note{font-size:10px;color:var(--dim);font-style:italic;padding:6px 14px 10px}
+.divider{height:1px;background:var(--bd);margin:28px 0}
+
+@media(max-width:768px){.content{padding:16px 14px}.kg{grid-template-columns:repeat(2,1fr)}.cols{grid-template-columns:1fr}.ig{grid-template-columns:1fr}.bl-l{width:95px;font-size:10px}.si{width:130px}}
+@media print{.hdr,.subtabs{position:static}.section{display:block!important;page-break-inside:avoid;margin-bottom:14px}.nav,.subtabs{display:none}}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-row">
+    <div>
+      <div class="logo">Torpedo Ejecutivo</div>
+      <div class="htitle">EBCT · Estadística · Startup Ciencia</div>
+      <div class="hsub">Febrero 2026 · Subsecretaría de CTCI</div>
+    </div>
+    <div class="sw"><span class="ic2">🔍</span><input type="text" class="si" placeholder="Buscar dato..." id="si" oninput="search(this.value)"></div>
+  </div>
+  <div class="nav">
+    <div class="pillar active" data-p="ebct" onclick="go('ebct',this)">📋 EBCT Caracterización</div>
+    <div class="pillar" data-p="stats" onclick="go('stats',this)">📊 Análisis Estadístico</div>
+    <div class="pillar" data-p="suc" onclick="go('suc',this)">🚀 Startup Ciencia</div>
+  </div>
+</div>
+<div class="subtabs" id="stabs">
+  <div class="stab active" data-s="ebct-main" onclick="sub(this)">Perfil, I+D y Mercado</div>
+  <div class="stab" data-s="ebct-ali" onclick="sub(this)">Alianzas y Exportaciones</div>
+</div>
+
+<div class="content">
+
+<!-- ===================== EBCT: PERFIL + I+D + MERCADO ===================== -->
+<div class="section active" id="ebct-main">
+
+<div class="ctx">
+  <strong>¿Qué estás mirando?</strong> Resultados del <strong>3er Registro de Caracterización EBCT (2024)</strong>, que encuestó a 477 Empresas de Base Científico-Tecnológica en Chile. Aquí se resume quiénes son, qué tecnologías usan, a quién le venden, qué propiedad intelectual tienen y cómo se financian.
+</div>
+
+<div class="sh">📋 Datos Generales</div>
+<div class="kg">
+  <div class="kpi b"><div class="kv">477</div><div class="kl">Empresas encuestadas (100%)</div></div>
+  <div class="kpi g"><div class="kv">474</div><div class="kl">Constituidas formalmente (99,4%)</div></div>
+  <div class="kpi o"><div class="kv">383</div><div class="kl">Con ventas (80,3% de 477)</div></div>
+  <div class="kpi r"><div class="kv">94</div><div class="kl">Sin ventas aún (19,7% de 477)</div></div>
+  <div class="kpi g"><div class="kv">344</div><div class="kl">Postuló a fondos públicos (72,1%)</div></div>
+  <div class="kpi p"><div class="kv">36,5%</div><div class="kl">Menos de 5 años de vida (~174 emp.)</div></div>
+</div>
+
+<div class="cols">
+<div class="tw"><div class="tt">🧬 ¿Cómo surgieron las EBCT?</div>
+  <table><tr><th>Origen</th><th style="text-align:right">N</th><th style="text-align:right">%</th></tr>
+  <tr><td>Ideas de quienes trabajaban en otra empresa</td><td class="m" style="text-align:right">207</td><td class="m" style="text-align:right">43,4%</td></tr>
+  <tr><td>Estudiantes o profesores de universidad</td><td class="m" style="text-align:right">119</td><td class="m" style="text-align:right">24,9%</td></tr>
+  <tr><td>Investigadores de centro de investigación</td><td class="m" style="text-align:right">55</td><td class="m" style="text-align:right">11,5%</td></tr>
+  <tr><td>Oportunidad de mercado / Otra</td><td class="m" style="text-align:right">35</td><td class="m" style="text-align:right">7,3%</td></tr></table></div>
+
+<div class="tw"><div class="tt">👥 ¿De quién son las EBCT?</div>
+  <table><tr><th>Actor propietario</th><th style="text-align:right">Presente en</th><th style="text-align:right">Mayoritario</th></tr>
+  <tr><td>Fundadores chilenos (personas naturales)</td><td class="m" style="text-align:right">410 (90,9%)</td><td class="m vg" style="text-align:right">77,3%</td></tr>
+  <tr><td>Corporaciones / empresas chilenas</td><td class="m" style="text-align:right">59 (13,1%)</td><td class="m" style="text-align:right">44,1%</td></tr>
+  <tr><td>Socios capitalistas chilenos</td><td class="m" style="text-align:right">47 (10,4%)</td><td class="m" style="text-align:right">25,5%</td></tr>
+  <tr><td>Inversionistas ángeles / VC / Aceleradoras</td><td class="m" style="text-align:right">55 (12,2%)</td><td class="m vr" style="text-align:right">4–7%</td></tr></table></div>
+</div>
+
+<div class="sh">💻 Tecnologías y Clientes</div>
+<div class="cols">
+<div>
+  <div style="font-size:12px;font-weight:600;margin-bottom:10px;color:var(--dim)">Tecnologías principales (selección múltiple, de 477)</div>
+  <div class="bars">
+    <div class="br"><div class="bl-l">Biotecnología</div><div class="bl-t"><div class="bl-f fg" style="width:100%">107</div></div><div class="bl-pct">22,4%</div></div>
+    <div class="br"><div class="bl-l">Inteligencia Artificial</div><div class="bl-t"><div class="bl-f fb" style="width:91.6%">98</div></div><div class="bl-pct">20,5%</div></div>
+    <div class="br"><div class="bl-l">Medioambiente</div><div class="bl-t"><div class="bl-f fg" style="width:77.6%">83</div></div><div class="bl-pct">17,4%</div></div>
+    <div class="br"><div class="bl-l">Internet de las cosas</div><div class="bl-t"><div class="bl-f fp" style="width:65.4%">~70</div></div><div class="bl-pct">~14,7%</div></div>
+    <div class="br"><div class="bl-l">Materiales avanzados</div><div class="bl-t"><div class="bl-f fo" style="width:55.1%">~59</div></div><div class="bl-pct">~12,4%</div></div>
+    <div class="br"><div class="bl-l">Deep / Machine Learning</div><div class="bl-t"><div class="bl-f fb" style="width:50.5%">~54</div></div><div class="bl-pct">~11,3%</div></div>
+  </div>
+</div>
+<div>
+  <div style="font-size:12px;font-weight:600;margin-bottom:10px;color:var(--dim)">Tipo de clientes (sel. múltiple, de 383 con ventas)</div>
+  <div class="bars">
+    <div class="br"><div class="bl-l">Grandes empresas priv.</div><div class="bl-t"><div class="bl-f fb" style="width:100%">253</div></div><div class="bl-pct">66,1%</div></div>
+    <div class="br"><div class="bl-l">PYMES</div><div class="bl-t"><div class="bl-f fg" style="width:85%">215</div></div><div class="bl-pct">56,1%</div></div>
+    <div class="br"><div class="bl-l">Microempresas</div><div class="bl-t"><div class="bl-f fo" style="width:24.9%">63</div></div><div class="bl-pct">16,4%</div></div>
+    <div class="br"><div class="bl-l">Empresas públicas</div><div class="bl-t"><div class="bl-f fp" style="width:19%">48</div></div><div class="bl-pct">12,5%</div></div>
+    <div class="br"><div class="bl-l">Gobierno</div><div class="bl-t"><div class="bl-f fr" style="width:18.6%">47</div></div><div class="bl-pct">12,3%</div></div>
+  </div>
+</div>
+</div>
+
+<div class="sh">🔬 I+D y Propiedad Intelectual</div>
+<div class="kg">
+  <div class="kpi b"><div class="kv">223</div><div class="kl">Con área formal de I+D (46,8% de 477)</div></div>
+  <div class="kpi o"><div class="kv">254</div><div class="kl">Sin área formal I+D (53,2%)</div></div>
+  <div class="kpi g"><div class="kv">145</div><div class="kl">Vinculada con actores extranjeros (30,4%)</div></div>
+</div>
+
+<div class="cols">
+<div class="tw"><div class="tt">🔒 Propiedad intelectual (sel. múltiple, de 477)</div>
+  <table><tr><th>Mecanismo</th><th style="text-align:right">N</th><th style="text-align:right">%</th></tr>
+  <tr><td>Patente de invención (otorgada o en trámite)</td><td class="m" style="text-align:right">137</td><td class="m" style="text-align:right">28,7%</td></tr>
+  <tr><td>Marca comercial</td><td class="m" style="text-align:right">123</td><td class="m" style="text-align:right">25,8%</td></tr>
+  <tr><td>Secreto industrial</td><td class="m" style="text-align:right">~95</td><td class="m" style="text-align:right">~19,9%</td></tr>
+  <tr><td>Diseño industrial</td><td class="m" style="text-align:right">~40</td><td class="m" style="text-align:right">~8,4%</td></tr></table></div>
+
+<div class="ins n" style="align-self:start"><div class="ins-t">💰 Inversión previa a primera venta</div><div class="ins-b">La mediana se encuentra en el rango <span class="is">$10M – $19M CLP</span>. La media está inflada por pocos casos con inversiones extraordinariamente altas, por lo que la mediana es el mejor indicador.</div></div>
+</div>
+</div>
+
+<!-- ===================== EBCT: ALIANZAS ===================== -->
+<div class="section" id="ebct-ali">
+
+<div class="ctx">
+  <strong>¿Qué estás mirando?</strong> Las alianzas internacionales y destinos de exportación de las 477 EBCT. Solo el 30,4% (145) tiene vínculos con actores extranjeros. EEUU lidera en alianzas, pero Perú lidera como destino de exportación.
+</div>
+
+<div class="kg">
+  <div class="kpi b"><div class="kv">145</div><div class="kl">Con vínculos extranjeros (30,4% de 477)</div></div>
+  <div class="kpi g"><div class="kv">27</div><div class="kl">Alianzas con EEUU (top 1 alianzas)</div></div>
+  <div class="kpi o"><div class="kv">47</div><div class="kl">EBCT exportan a Perú (top 1 exportación)</div></div>
+</div>
+
+<div class="cols">
+<div class="tw"><div class="tt">🤝 Top alianzas por país</div>
+  <table><tr><th>País</th><th style="text-align:right">Total</th><th style="text-align:right">Rep. Comercial</th><th style="text-align:right">Acuerdo Tec.</th><th style="text-align:right">Joint Venture</th></tr>
+  <tr><td>🇺🇸 Estados Unidos</td><td class="m" style="text-align:right">27</td><td class="m" style="text-align:right">24 (88,9%)</td><td class="m" style="text-align:right">13 (48,1%)</td><td class="m" style="text-align:right">5 (18,5%)</td></tr>
+  <tr><td>🇲🇽 México</td><td class="m" style="text-align:right">18</td><td class="m" style="text-align:right">14 (77,8%)</td><td class="m" style="text-align:right">10 (55,6%)</td><td class="m" style="text-align:right">5 (27,8%)</td></tr>
+  <tr><td>🇪🇸 España</td><td class="m" style="text-align:right">14</td><td class="m" style="text-align:right">10 (71,4%)</td><td class="m" style="text-align:right">7 (50,0%)</td><td class="m" style="text-align:right">4 (28,6%)</td></tr>
+  <tr><td>🇵🇪 Perú</td><td class="m" style="text-align:right">13</td><td class="m" style="text-align:right">7 (53,8%)</td><td class="m" style="text-align:right">6 (46,2%)</td><td class="m" style="text-align:right">2 (15,4%)</td></tr>
+  <tr><td>🇧🇷 Brasil</td><td class="m" style="text-align:right">11</td><td class="m" style="text-align:right">9 (81,8%)</td><td class="m" style="text-align:right">4 (36,4%)</td><td class="m" style="text-align:right">2 (18,2%)</td></tr>
+  <tr><td>🇦🇷 Argentina</td><td class="m" style="text-align:right">9</td><td class="m" style="text-align:right">4 (44,4%)</td><td class="m" style="text-align:right">6 (66,7%)</td><td class="m" style="text-align:right">2 (22,2%)</td></tr>
+  <tr><td>🇨🇳 China</td><td class="m" style="text-align:right">7</td><td class="m" style="text-align:right">4 (57,1%)</td><td class="m" style="text-align:right">5 (71,4%)</td><td class="m" style="text-align:right">1 (14,3%)</td></tr></table></div>
+
+<div>
+  <div style="font-size:12px;font-weight:600;margin-bottom:10px">✈️ Top destinos de exportación</div>
+  <div class="bars">
+    <div class="br"><div class="bl-l">🇵🇪 Perú</div><div class="bl-t"><div class="bl-f fg" style="width:100%">47</div></div><div class="bl-pct"></div></div>
+    <div class="br"><div class="bl-l">🇺🇸 EEUU</div><div class="bl-t"><div class="bl-f fb" style="width:76.6%">36</div></div><div class="bl-pct"></div></div>
+    <div class="br"><div class="bl-l">🇲🇽 México</div><div class="bl-t"><div class="bl-f fo" style="width:55.3%">26</div></div><div class="bl-pct"></div></div>
+    <div class="br"><div class="bl-l">🇨🇴 Colombia</div><div class="bl-t"><div class="bl-f fp" style="width:53.2%">25</div></div><div class="bl-pct"></div></div>
+    <div class="br"><div class="bl-l">🇦🇷 Argentina</div><div class="bl-t"><div class="bl-f fr" style="width:31.9%">15</div></div><div class="bl-pct"></div></div>
+  </div>
+  <div class="ins n" style="margin-top:12px"><div class="ins-t">💡 Lectura rápida</div><div class="ins-b">LATAM concentra la mayoría de los destinos de exportación. EEUU es el principal socio para alianzas pero <strong>no</strong> el principal destino de exportación (ese es Perú).</div></div>
+</div>
+</div>
+</div>
+
+<!-- ===================== ESTADÍSTICA: HALLAZGOS ===================== -->
+<div class="section" id="stats-main">
+
+<div class="ctx">
+  <strong>¿Qué estás mirando?</strong> Análisis estadístico sobre cuánto tardan las EBCT en lograr su <strong>primera venta</strong> (Segmento 1, N=315) y luego en llegar al <strong>punto de equilibrio</strong> (Segmento 2, N=193). Se identificaron las variables que aceleran o retrasan cada etapa usando tests no paramétricos con corrección de Benjamini-Hochberg.
+</div>
+
+<div class="sh">⏱ Segmento 1 — Tiempo a Primera Venta</div>
+<div class="kg">
+  <div class="kpi b"><div class="kv">315</div><div class="kl">Empresas analizadas (66% de 477)</div></div>
+  <div class="kpi o"><div class="kv">8,32 m</div><div class="kl">Media (meses)</div></div>
+  <div class="kpi g"><div class="kv">3,0 m</div><div class="kl">Mediana (meses) — el 50% vende en ≤3 m</div></div>
+  <div class="kpi p"><div class="kv">18</div><div class="kl">Variables robustas (q < 0,05)</div></div>
+</div>
+
+<div class="ig">
+  <div class="ins a"><div class="ins-t">🟢 Operar con utilidades acelera la venta</div><div class="ins-b">Las EBCT que ya generan utilidades vendieron en promedio en <span class="is vg">5,06 meses</span> (IC: 3,86–6,39). Es la variable más significativa de todo el estudio (p ≈ 0). La solidez financiera previa facilita llegar al mercado.</div></div>
+  <div class="ins a"><div class="ins-t">🟢 Más trabajadores = vende más rápido</div><div class="ins-b">Cada trabajador adicional se asocia con menos meses hasta la primera venta (<span class="is vg">ρ = -0,257</span>, p = 0,000012). Equipos más grandes tienen mayor capacidad operativa y comercial.</div></div>
+  <div class="ins d"><div class="ins-t">🔴 Más inversión previa = tarda más en vender</div><div class="ins-b">Las EBCT que invirtieron más tardaron más en vender (<span class="is vr">ρ = +0,235</span>, p = 0,000042). Proyectos de mayor complejidad tecnológica requieren ciclos de desarrollo más largos.</div></div>
+  <div class="ins d"><div class="ins-t">🔴 Empresa más nueva = tarda más</div><div class="ins-b">Correlación más fuerte del estudio (<span class="is vr">ρ = +0,387</span>, p ≈ 0). Las empresas con más trayectoria ya tienen redes y experiencia que aceleran el proceso comercial.</div></div>
+</div>
+
+<div class="tw"><div class="tt">📐 Dimensiones que más importan (corrección BH jerárquica)</div>
+  <table><tr><th>Dimensión</th><th style="text-align:right">Q_dim</th><th>Interpretación</th></tr>
+  <tr><td>E. Rentabilidad</td><td class="m vg" style="text-align:right">≈ 0</td><td>Empresas rentables venden antes</td></tr>
+  <tr><td>B. Tamaño del equipo</td><td class="m vg" style="text-align:right">0,0001</td><td>Más personal = más rápido al mercado</td></tr>
+  <tr><td>D. Financiamiento</td><td class="m vg" style="text-align:right">0,0002</td><td>Estructura de financiamiento influye en velocidad</td></tr>
+  <tr><td>B. Equipo fundador</td><td class="m vg" style="text-align:right">0,0002</td><td>Composición del equipo fundador importa</td></tr></table></div>
+
+<div class="divider"></div>
+
+<div class="sh">📈 Segmento 2 — Primera Venta → Punto de Equilibrio</div>
+<div class="kg">
+  <div class="kpi b"><div class="kv">193</div><div class="kl">N RAW — universo completo</div></div>
+  <div class="kpi o"><div class="kv">27,3 m</div><div class="kl">Media RAW (meses)</div></div>
+  <div class="kpi g"><div class="kv">15,0 m</div><div class="kl">Mediana — 50% llega al PE en ≤15 m</div></div>
+  <div class="kpi r"><div class="kv">2</div><div class="kl">Solo 2 variables robustas (q < 0,05)</div></div>
+</div>
+
+<div class="ig">
+  <div class="ins d"><div class="ins-t">🔴 Más inversión previa = más meses al PE</div><div class="ins-b">Consistente con Seg. 1: las EBCT con mayor inversión previa tardan más en alcanzar equilibrio (<span class="is vr">ρ = +0,262</span>, q = 0,041). Proyectos capital-intensivos tienen ciclos de retorno más largos.</div></div>
+  <div class="ins d"><div class="ins-t">🔴 Fondos públicos = +10,4 meses al PE</div><div class="ins-b">Quienes postularon tardan <span class="is vr">30,66 m</span> vs <span class="is vg">20,27 m</span> (q = 0,012). No implica causalidad: empresas más complejas postulan más y naturalmente tardan más.</div></div>
+</div>
+
+<div class="divider"></div>
+
+<div class="sh">🔀 Comparación rápida</div>
+<div class="tw">
+  <table><tr><th>Métrica</th><th style="text-align:right">Seg. 1 (Inicio → Venta)</th><th style="text-align:right">Seg. 2 (Venta → PE)</th><th>Lectura</th></tr>
+  <tr><td>N</td><td class="m" style="text-align:right">315</td><td class="m" style="text-align:right">193</td><td style="font-size:10px;color:var(--dim)">42% menos muestra en Seg. 2</td></tr>
+  <tr><td>Media (meses)</td><td class="m vg" style="text-align:right">8,32</td><td class="m vr" style="text-align:right">27,33</td><td style="font-size:10px;color:var(--dim)">3,3x más lento llegar al PE</td></tr>
+  <tr><td>Mediana (meses)</td><td class="m vg" style="text-align:right">3,0</td><td class="m vr" style="text-align:right">15,0</td><td style="font-size:10px;color:var(--dim)">5x más lento (mediana)</td></tr>
+  <tr><td>Variables robustas</td><td class="m vg" style="text-align:right">18</td><td class="m vr" style="text-align:right">2</td><td style="font-size:10px;color:var(--dim)">Seg. 2 tiene muy poco poder estadístico</td></tr>
+  <tr><td>Variable consistente</td><td class="m" style="text-align:right" colspan="2">VI.1.2 — Inversión previa (retrasa en ambos segmentos)</td><td></td></tr></table></div>
+
+<div class="ins n"><div class="ins-t">💡 Lectura para la reunión</div><div class="ins-b" style="font-size:12px;line-height:1.7">
+  <strong>El 50% de las EBCT vende en ≤ 3 meses, pero tarda ≤ 15 meses adicionales en llegar al punto de equilibrio.</strong> La inversión previa es la única variable que retrasa en ambas etapas. Más trabajadores acelera la primera venta. Seg. 2 tiene alta heterogeneidad (SD = 34,85) y bajo poder estadístico.
+</div></div>
+</div>
+
+<!-- ===================== ESTADÍSTICA: VARIABLES ===================== -->
+<div class="section" id="stats-vars">
+
+<div class="ctx">
+  <strong>¿Qué estás mirando?</strong> Tabla completa de las <strong>variables robustas</strong> (estadísticamente significativas tras corrección múltiple) que aceleran o retrasan cada etapa del camino comercial de las EBCT.
+</div>
+
+<div class="tw"><div class="tt">⏱ Seg. 1: Principales variables robustas (de 18 totales, top 6)</div>
+  <table><tr><th>Variable</th><th>Descripción</th><th style="text-align:right">Efecto</th><th>¿Qué significa?</th><th>Dir.</th></tr>
+  <tr><td class="m">VI.1.4</td><td>Opera sobre punto de equilibrio</td><td class="m vg" style="text-align:right">5,06 m</td><td style="font-size:10px;color:var(--dim)">Estar en utilidades → vende mucho antes</td><td><span class="badge badge-g">Acelera</span></td></tr>
+  <tr><td class="m">III.2.1.1</td><td>Cantidad de trabajadores</td><td class="m vg" style="text-align:right">ρ = -0,257</td><td style="font-size:10px;color:var(--dim)">Más equipo → más rápido al mercado</td><td><span class="badge badge-g">Acelera</span></td></tr>
+  <tr><td class="m">VI.1.2</td><td>Inversión previa a primera venta</td><td class="m vr" style="text-align:right">ρ = +0,235</td><td style="font-size:10px;color:var(--dim)">Más inversión → ciclo de desarrollo más largo</td><td><span class="badge badge-r">Retrasa</span></td></tr>
+  <tr><td class="m">I.11.1.2</td><td>Año de constitución</td><td class="m vr" style="text-align:right">ρ = +0,387</td><td style="font-size:10px;color:var(--dim)">Empresa nueva → menos redes y experiencia</td><td><span class="badge badge-r">Retrasa</span></td></tr>
+  <tr><td class="m">VII.1</td><td>Postuló a fondos públicos</td><td class="m vr" style="text-align:right">Sí > No</td><td style="font-size:10px;color:var(--dim)">Refleja complejidad del proyecto, no causalidad</td><td><span class="badge badge-r">Retrasa</span></td></tr>
+  <tr><td class="m">IV.5</td><td>Tiene protección intelectual</td><td class="m vr" style="text-align:right">Sí > No</td><td style="font-size:10px;color:var(--dim)">Proceso de patentar toma tiempo antes de vender</td><td><span class="badge badge-r">Retrasa</span></td></tr></table></div>
+
+<div class="tw"><div class="tt">📈 Seg. 2: 2 variables robustas + 2 sugerentes</div>
+  <table><tr><th>Variable</th><th>Descripción</th><th style="text-align:right">Efecto</th><th>q (BH)</th><th>¿Qué significa?</th></tr>
+  <tr><td class="m">VI.1.2</td><td>Inversión previa</td><td class="m vr" style="text-align:right">ρ = +0,262</td><td class="m vg">0,041 ✓</td><td style="font-size:10px;color:var(--dim)">Más capital invertido → PE más lejano</td></tr>
+  <tr><td class="m">VII.1</td><td>Fondos públicos</td><td class="m vr" style="text-align:right">+10,4 m</td><td class="m vg">0,012 ✓</td><td style="font-size:10px;color:var(--dim)">Postulantes tardan más — posible sesgo de complejidad</td></tr>
+  <tr><td class="m">V.1.11.2</td><td>Actores Chile vinculados</td><td class="m vo" style="text-align:right">ρ = +0,208</td><td class="m vo">0,291 ~</td><td style="font-size:10px;color:var(--dim)">Sugiere: más vínculos ≠ más velocidad al PE</td></tr>
+  <tr><td class="m">III.1.5.2</td><td>Socias mujeres fundadoras</td><td class="m vg" style="text-align:right">ρ = -0,182</td><td class="m vo">0,428 ~</td><td style="font-size:10px;color:var(--dim)">Sugiere (sin confirmar) aceleración del PE</td></tr></table></div>
+
+<div class="ins w"><div class="ins-t">⚠️ Modelo Cox — Limitaciones importantes</div><div class="ins-b">N = 50 (84% de pérdida por datos faltantes). 3 predictores en modelo final, pero solo <span class="is">VII.1 (fondos públicos)</span> es prospectivo (se conoce antes de la venta). Los otros 2 son contemporáneos al evento → no sirven para predecir.</div></div>
+</div>
+
+<!-- ===================== STARTUP CIENCIA: RESULTADOS ===================== -->
+<div class="section" id="suc-main">
+
+<div class="ctx">
+  <strong>¿Qué estás mirando?</strong> Resultados de la evaluación del programa <strong>Startup Ciencia</strong> (ANID, 2020-2023). Es un fondo que cofinancia y apoya técnicamente la creación de EBCT. Se encuestó a 77 beneficiarios (35% del universo de 220) y 85 no beneficiarios (15,6% de 544). Además se entrevistaron 21 empresas beneficiarias en profundidad.
+</div>
+
+<div class="sh">📋 Muestra del Estudio</div>
+<div class="cols">
+<div class="tw"><div class="tt">✅ Beneficiarios (N=77, tasa 35,0%)</div>
+  <table><tr><th>Año</th><th style="text-align:right">Resp.</th><th style="text-align:right">Universo</th><th style="text-align:right">Tasa</th></tr>
+  <tr><td>2020</td><td class="m" style="text-align:right">2</td><td class="m" style="text-align:right">18</td><td class="m" style="text-align:right">11,1%</td></tr>
+  <tr><td>2021</td><td class="m" style="text-align:right">9</td><td class="m" style="text-align:right">45</td><td class="m" style="text-align:right">20,0%</td></tr>
+  <tr><td>2022</td><td class="m" style="text-align:right">23</td><td class="m" style="text-align:right">70</td><td class="m" style="text-align:right">32,9%</td></tr>
+  <tr><td>2023</td><td class="m" style="text-align:right">43</td><td class="m" style="text-align:right">87</td><td class="m vg" style="text-align:right">49,4%</td></tr>
+  <tr style="font-weight:700;background:var(--bgg)"><td>Total</td><td class="m" style="text-align:right">77</td><td class="m" style="text-align:right">220</td><td class="m vb" style="text-align:right">35,0%</td></tr></table></div>
+<div class="tw"><div class="tt">❌ No Beneficiarios (N=85, tasa 15,6%)</div>
+  <table><tr><th>Año</th><th style="text-align:right">Resp.</th><th style="text-align:right">Universo</th><th style="text-align:right">Tasa</th></tr>
+  <tr><td>2020</td><td class="m" style="text-align:right">34</td><td class="m" style="text-align:right">231</td><td class="m" style="text-align:right">14,7%</td></tr>
+  <tr><td>2021</td><td class="m" style="text-align:right">6</td><td class="m" style="text-align:right">77</td><td class="m" style="text-align:right">7,8%</td></tr>
+  <tr><td>2022</td><td class="m" style="text-align:right">7</td><td class="m" style="text-align:right">76</td><td class="m" style="text-align:right">9,2%</td></tr>
+  <tr><td>2023</td><td class="m" style="text-align:right">38</td><td class="m" style="text-align:right">160</td><td class="m" style="text-align:right">23,8%</td></tr>
+  <tr style="font-weight:700;background:var(--bgr)"><td>Total</td><td class="m" style="text-align:right">85</td><td class="m" style="text-align:right">544</td><td class="m vb" style="text-align:right">15,6%</td></tr></table></div>
+</div>
+
+<div class="sh">📊 Resultado Central: Madurez Tecnológica (TRL)</div>
+<div class="kg">
+  <div class="kpi g"><div class="kv">TRL 4→7</div><div class="kl">Beneficiarios: +3 niveles de mediana</div></div>
+  <div class="kpi o"><div class="kv">TRL 4→6</div><div class="kl">No beneficiarios: +2 niveles</div></div>
+  <div class="kpi b"><div class="kv">p = 0,005</div><div class="kl">Diferencia significativa al 1%</div></div>
+</div>
+<div class="ins a" style="margin-bottom:18px"><div class="ins-t">🟢 El programa genera avance TRL adicional</div><div class="ins-b">Ambos grupos parten igual (TRL 4, p = 0,628). Tras el programa, beneficiarios llegan a <span class="is vg">TRL 7</span> vs no beneficiarios <span class="is vo">TRL 6</span> (p = 0,005***). No hay diferencias significativas por sexo, área OCDE ni región geográfica — el programa beneficia de forma equitativa. En salud/biotech el avance es más lento por regulación; en energía/tech aplicada es más rápido.</div></div>
+
+<div class="sh">🛒 Primera Venta y Capital</div>
+<div class="cols">
+<div class="tw"><div class="tt">Primera venta post formalización (Benef. 2023, N=43)</div>
+  <table><tr><th>Plazo</th><th style="text-align:right">N</th><th style="text-align:right">%</th><th>Lectura</th></tr>
+  <tr><td>Aún no ha vendido</td><td class="m vr" style="text-align:right">15</td><td class="m vr" style="text-align:right">34,9%</td><td style="font-size:10px;color:var(--dim)">1 de cada 3 no ha vendido</td></tr>
+  <tr><td>1 a 6 meses</td><td class="m vg" style="text-align:right">14</td><td class="m vg" style="text-align:right">32,6%</td><td style="font-size:10px;color:var(--dim)">Grupo exitoso: venta rápida</td></tr>
+  <tr><td>7 a 12 meses</td><td class="m" style="text-align:right">7</td><td class="m" style="text-align:right">16,3%</td><td></td></tr>
+  <tr><td>13 a 24 meses</td><td class="m" style="text-align:right">5</td><td class="m" style="text-align:right">11,6%</td><td></td></tr>
+  <tr><td>Más de 2 años</td><td class="m" style="text-align:right">2</td><td class="m" style="text-align:right">4,7%</td><td></td></tr></table></div>
+
+<div class="tw"><div class="tt">💰 Capital privado (Benef. 2020-2023, N=77)</div>
+  <table><tr><th>Etapa</th><th style="text-align:right">No levantó</th><th style="text-align:right">Sí levantó</th></tr>
+  <tr><td>Antes del programa</td><td class="m" style="text-align:right">58 (75,3%)</td><td class="m" style="text-align:right">19 (24,7%)</td></tr>
+  <tr><td>Durante</td><td class="m" style="text-align:right">61 (79,2%)</td><td class="m" style="text-align:right">16 (20,8%)</td></tr>
+  <tr><td>Después</td><td class="m vr" style="text-align:right">63 (81,8%)</td><td class="m" style="text-align:right">14 (18,2%)</td></tr></table>
+  <div class="note">La mayoría no levanta capital privado en ninguna etapa. La proporción empeora post programa.</div></div>
+</div>
+
+<div class="sh">👥 Equipos y Alianzas</div>
+<div class="kg">
+  <div class="kpi g"><div class="kv">6</div><div class="kl">Mediana empleados beneficiarios</div></div>
+  <div class="kpi o"><div class="kv">4</div><div class="kl">Mediana no beneficiarios (p = 0,005**)</div></div>
+  <div class="kpi b"><div class="kv">29</div><div class="kl">Contrataron personal nuevo (37,7% de 77)</div></div>
+  <div class="kpi p"><div class="kv">62</div><div class="kl">Interactuaron con aliados estratégicos (80,5%)</div></div>
+</div>
+
+<div class="cols">
+<div class="tw"><div class="tt">🤝 Con quién interactúan (sel. múltiple, N=77)</div>
+  <table><tr><th>Actor</th><th style="text-align:right">N</th><th style="text-align:right">%</th></tr>
+  <tr><td>Aliados estratégicos</td><td class="m" style="text-align:right">62</td><td class="m vg" style="text-align:right">80,5%</td></tr>
+  <tr><td>Proveedoras especializadas</td><td class="m" style="text-align:right">39</td><td class="m" style="text-align:right">50,6%</td></tr>
+  <tr><td>Inversionistas / fondos</td><td class="m" style="text-align:right">37</td><td class="m" style="text-align:right">48,1%</td></tr>
+  <tr><td>Consultoras</td><td class="m" style="text-align:right">30</td><td class="m" style="text-align:right">39,0%</td></tr>
+  <tr><td>Licenciamiento tecnología</td><td class="m" style="text-align:right">26</td><td class="m" style="text-align:right">33,8%</td></tr>
+  <tr><td>Joint venture</td><td class="m" style="text-align:right">12</td><td class="m" style="text-align:right">15,6%</td></tr></table></div>
+<div class="tw"><div class="tt">🏛️ Apoyo de entidades externas (% que NUNCA recibió)</div>
+  <table><tr><th>Entidad</th><th style="text-align:right">Nunca recibió apoyo</th></tr>
+  <tr><td>OTL (Oficina Transf. y Licenciamiento)</td><td class="m vr" style="text-align:right">60 (77,9%)</td></tr>
+  <tr><td>Centro de investigación</td><td class="m vr" style="text-align:right">57 (74,0%)</td></tr>
+  <tr><td>HUB de innovación</td><td class="m vr" style="text-align:right">52 (67,5%)</td></tr>
+  <tr><td>Aceleradora de negocios</td><td class="m vr" style="text-align:right">51 (66,2%)</td></tr>
+  <tr><td>Universidad / Incubadora</td><td class="m vo" style="text-align:right">40 (51,9%)</td></tr></table>
+  <div class="note">La mayoría nunca ha recibido apoyo de entidades del ecosistema. Los HUBs son la única entidad con más apoyo durante el programa que antes de él.</div></div>
+</div>
+</div>
+
+<!-- ===================== STARTUP CIENCIA: CONCLUSIONES ===================== -->
+<div class="section" id="suc-conc">
+
+<div class="ctx">
+  <strong>¿Qué estás mirando?</strong> Conclusiones principales de la <strong>Evaluación de Resultados del Programa Startup Ciencia</strong> (Informe Final, GDS Consultores, 2025, ID 1098710-22-LE24). Resumen de hallazgos, desafíos operativos y valoración del programa.
+</div>
+
+<div class="sh">✅ Lo que funciona</div>
+<div class="ig">
+  <div class="ins a"><div class="ins-t">TRL: avance significativamente mayor</div><div class="ins-b">Beneficiarios avanzan de TRL 4 a 7 (+3) vs no beneficiarios de 4 a 6 (+2). Diferencia significativa al 1% (p = 0,005). Sin diferencias por sexo, área OCDE ni región — el programa beneficia equitativamente.</div></div>
+  <div class="ins a"><div class="ins-t">El subsidio es determinante</div><div class="ins-b"><span class="is">17 de 21</span> (81%) entrevistados considera el subsidio factor determinante para la continuidad de sus proyectos. No beneficiarios confirman: la no adjudicación los excluyó de espacios clave de vinculación.</div></div>
+  <div class="ins a"><div class="ins-t">Equipos más grandes</div><div class="ins-b">Beneficiarios tienen mediana de <span class="is">6 empleados</span> vs 4 en no beneficiarios (p = 0,005**). El 37,7% (29/77) contrató personal nuevo post programa.</div></div>
+</div>
+
+<div class="sh">⚠️ Brechas y desafíos</div>
+<div class="ig">
+  <div class="ins d"><div class="ins-t">34,9% de beneficiarios 2023 sin primera venta</div><div class="ins-b">Un tercio aún no ha vendido. 18/21 entrevistados reconocen falta de experiencia en estrategias comerciales como barrera principal. Solo el 6,5% obtuvo patentes post programa.</div></div>
+  <div class="ins d"><div class="ins-t">Capital privado: muy bajo y empeora</div><div class="ins-b">75–82% no levantó capital privado en ninguna etapa. La proporción que no levanta capital <strong>aumenta</strong> tras el programa (de 75,3% a 81,8%).</div></div>
+  <div class="ins w"><div class="ins-t">Alianzas: acceso a redes pero poca conversión</div><div class="ins-b">80,5% interactuó con aliados estratégicos, pero 51–78% nunca recibió apoyo de entidades externas. Las redes no se convierten en acuerdos sostenibles.</div></div>
+  <div class="ins w"><div class="ins-t">Avance TRL desparejo por sector</div><div class="ins-b">Salud/biotech avanza más lento por regulación (11/21). Costos de validación clínica: <span class="is">$100–500M CLP</span>. El programa no diferencia por sector ni marco regulatorio.</div></div>
+  <div class="ins w"><div class="ins-t">Costos operativos en aumento</div><div class="ins-b">Boletas de garantía subieron de <span class="is">$2–3M a $6–15M CLP</span>. Cofinanciamiento complejo en etapas iniciales (4/21). Falta acompañamiento en maduración comercial (10/21).</div></div>
+  <div class="ins w"><div class="ins-t">Falta de experiencia comercial</div><div class="ins-b"><span class="is">18 de 21</span> (85,7%) entrevistados enfrentan obstáculos al definir y validar su modelo de negocio. La retención de talento con perfil comercial es difícil en startups en etapa temprana.</div></div>
+</div>
+</div>
+
+</div>
+
+<script>
+const pillarTabs={
+  ebct:[{id:'ebct-main',label:'Perfil, I+D y Mercado'},{id:'ebct-ali',label:'Alianzas y Exportaciones'}],
+  stats:[{id:'stats-main',label:'Hallazgos y Comparación'},{id:'stats-vars',label:'Variables Clave'}],
+  suc:[{id:'suc-main',label:'Resultados del Programa'},{id:'suc-conc',label:'Conclusiones'}]
+};
+let cur='ebct';
+
+function go(p,el){
+  cur=p;
+  document.querySelectorAll('.pillar').forEach(e=>e.classList.remove('active'));
+  el.classList.add('active');
+  const sb=document.getElementById('stabs');
+  sb.innerHTML=pillarTabs[p].map((t,i)=>`<div class="stab${i===0?' active':''}" data-s="${t.id}" onclick="sub(this)">${t.label}</div>`).join('');
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(pillarTabs[p][0].id).classList.add('active');
+}
+
+function sub(el){
+  document.querySelectorAll('.stab').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(el.dataset.s).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function search(q){
+  if(!q||q.length<2){document.querySelectorAll('tr,.kpi,.ins,.tw').forEach(e=>e.style.opacity='1');return}
+  const ql=q.toLowerCase();
+  document.querySelectorAll('.section').forEach(s=>s.classList.add('active'));
+  document.querySelectorAll('tr').forEach(tr=>{if(tr.querySelector('th'))return;tr.style.opacity=tr.textContent.toLowerCase().includes(ql)?'1':'0.1'});
+  document.querySelectorAll('.kpi').forEach(e=>e.style.opacity=e.textContent.toLowerCase().includes(ql)?'1':'0.15');
+  document.querySelectorAll('.ins').forEach(e=>e.style.opacity=e.textContent.toLowerCase().includes(ql)?'1':'0.1');
+}
+document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='k'){e.preventDefault();document.getElementById('si').focus()}});
+</script>
+</body>
+</html>
